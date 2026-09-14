@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>ENKO — Halftone Glow</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ENKO / GRAPHICS TOOL 01</p>
+          <h1>Halftone Glow</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="button button--ghost" id="randomizeButton" type="button">Новый seed</button>
+          <button class="button button--ghost" id="resetButton" type="button">Сбросить</button>
+          <button class="button button--primary" id="exportButton" type="button">Скачать PNG</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="stage" id="stage">
+          <canvas id="preview" width="1080" height="1350" aria-label="Предпросмотр халфтон-свечения"></canvas>
+          <div class="render-badge" id="renderBadge">0 элементов</div>
+        </div>
+
+        <aside class="controls" aria-label="Параметры генератора">
+          <section class="control-section">
+            <div class="section-title">
+              <span>01</span>
+              <h2>Холст</h2>
+            </div>
+            <label class="field">
+              <span>Формат</span>
+              <select id="format">
+                <option value="1080x1350">Пост · 1080 × 1350</option>
+                <option value="1080x1920">Сторис · 1080 × 1920</option>
+                <option value="1920x1080">Экран · 1920 × 1080</option>
+                <option value="1080x1080">Квадрат · 1080 × 1080</option>
+              </select>
+            </label>
+            <div class="field-grid">
+              <label class="field field--color">
+                <span>Фон</span>
+                <input id="backgroundColor" type="color" value="#122a4b">
+              </label>
+              <label class="field field--color">
+                <span>Свет</span>
+                <input id="glowColor" type="color" value="#ffffff">
+              </label>
+            </div>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title">
+              <span>02</span>
+              <h2>Свечение</h2>
+            </div>
+            <fieldset class="corner-picker">
+              <legend>Источник</legend>
+              <button type="button" data-corner="tl" class="corner is-active" aria-label="Сверху слева">↘</button>
+              <button type="button" data-corner="tr" class="corner" aria-label="Сверху справа">↙</button>
+              <button type="button" data-corner="bl" class="corner" aria-label="Снизу слева">↗</button>
+              <button type="button" data-corner="br" class="corner" aria-label="Снизу справа">↖</button>
+            </fieldset>
+            <label class="range-field">
+              <span><span>Отклонение от оси</span><output data-output="axisOffset">0</output></span>
+              <input id="axisOffset" type="range" min="-100" max="100" value="0">
+            </label>
+            <label class="range-field">
+              <span><span>Ширина луча</span><output data-output="beamWidth">100</output></span>
+              <input id="beamWidth" type="range" min="8" max="100" value="100">
+            </label>
+            <label class="range-field">
+              <span><span>Количество потоков</span><output data-output="beamCount">5</output></span>
+              <input id="beamCount" type="range" min="2" max="8" step="1" value="5">
+            </label>
+            <label class="range-field">
+              <span><span>Длина свечения</span><output data-output="falloff">109</output></span>
+              <input id="falloff" type="range" min="20" max="200" value="109">
+            </label>
+            <label class="range-field">
+              <span><span>Волнистость</span><output data-output="waviness">96</output></span>
+              <input id="waviness" type="range" min="0" max="100" value="96">
+            </label>
+            <label class="range-field">
+              <span><span>Масштаб волн</span><output data-output="waveScale">86</output></span>
+              <input id="waveScale" type="range" min="10" max="100" value="86">
+            </label>
+            <label class="range-field">
+              <span><span>Неравномерность волн</span><output data-output="waveIrregularity">100</output></span>
+              <input id="waveIrregularity" type="range" min="0" max="100" value="100">
+            </label>
+            <label class="range-field">
+              <span><span>Фактура света</span><output data-output="texture">78</output></span>
+              <input id="texture" type="range" min="0" max="100" value="78">
+              <small>Добавляет крупные облачные уплотнения и разрывы внутри конуса.</small>
+            </label>
+            <label class="range-field">
+              <span><span>Дрейф по объёму</span><output data-output="volumeDrift">72</output></span>
+              <input id="volumeDrift" type="range" min="0" max="100" value="72">
+              <small>Смещает уплотнения поперёк конуса по мере движения света.</small>
+            </label>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title">
+              <span>03</span>
+              <h2>Халфтон</h2>
+            </div>
+            <label class="range-field">
+              <span><span>Шаг сетки</span><output data-output="gridSize">8</output></span>
+              <input id="gridSize" type="range" min="7" max="48" value="8">
+            </label>
+            <label class="range-field">
+              <span><span>Плотность</span><output data-output="density">82</output></span>
+              <input id="density" type="range" min="1" max="100" value="82">
+            </label>
+            <label class="range-field">
+              <span><span>Контраст плотности</span><output data-output="densityContrast">125</output></span>
+              <input id="densityContrast" type="range" min="20" max="240" value="125">
+            </label>
+            <label class="toggle-field">
+              <input id="solidAreas" type="checkbox">
+              <span class="toggle" aria-hidden="true"></span>
+              <span>
+                <strong>Сплошные участки</strong>
+                <small>Собирает частицы до перекрытия в самых ярких областях.</small>
+              </span>
+            </label>
+            <label class="range-field range-field--accent" data-solid-option hidden>
+              <span><span>Порог концентрации</span><output data-output="solidThreshold">64</output></span>
+              <input id="solidThreshold" type="range" min="25" max="90" value="64">
+              <small>Ниже — больше слипшихся частиц, выше — только яркие ядра.</small>
+            </label>
+            <label class="range-field">
+              <span><span>Базовый размер</span><output data-output="baseSize">62</output></span>
+              <input id="baseSize" type="range" min="10" max="110" value="62">
+            </label>
+            <label class="range-field range-field--accent">
+              <span><span>Разброс размера</span><output data-output="sizeVariation">49</output></span>
+              <input id="sizeVariation" type="range" min="0" max="100" value="49">
+              <small>0 — только плотность одинаковых частиц; выше — к концентрации добавляется их рост.</small>
+            </label>
+          </section>
+
+          <section class="control-section">
+            <div class="section-title">
+              <span>04</span>
+              <h2>Модуль</h2>
+            </div>
+            <div class="segmented" role="group" aria-label="Тип модуля">
+              <button type="button" data-module="circle">Круг</button>
+              <button type="button" data-module="star" class="is-active">Звезда</button>
+              <button type="button" data-module="snowflake">Снежинка</button>
+              <button type="button" data-module="text">Текст</button>
+              <button type="button" data-module="svg">SVG</button>
+            </div>
+            <label class="field module-option" data-for-module="text" hidden>
+              <span>Набор символов</span>
+              <input id="symbols" type="text" value=".·=0+" maxlength="24" spellcheck="false">
+              <small>Символы автоматически сортируются по визуальной массе.</small>
+            </label>
+            <label class="field module-option" data-for-module="svg" hidden>
+              <span>Своя векторная форма</span>
+              <input id="svgFile" type="file" accept="image/svg+xml,.svg">
+              <small id="svgStatus">Выберите безопасный SVG-файл.</small>
+            </label>
+            <label class="range-field">
+              <span><span>Поворот модуля</span><output data-output="rotation">0</output></span>
+              <input id="rotation" type="range" min="-180" max="180" value="0">
+            </label>
+          </section>
+
+          <section class="control-section control-section--last">
+            <div class="section-title">
+              <span>05</span>
+              <h2>Вариант</h2>
+            </div>
+            <label class="field">
+              <span>Seed</span>
+              <input id="seed" type="number" min="1" max="999999999" value="314159">
+            </label>
+            <div class="inline-actions">
+              <button class="button button--ghost" id="savePresetButton" type="button">Скачать JSON</button>
+              <label class="button button--ghost file-button">
+                Загрузить JSON
+                <input id="loadPresetInput" type="file" accept="application/json,.json">
+              </label>
+            </div>
+          </section>
+        </aside>
+      </section>
+    </main>
+    <script src="src/app.js"></script>
+  </body>
+</html>
