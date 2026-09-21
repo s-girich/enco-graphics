@@ -1,10 +1,20 @@
+@font-face {
+  font-family: "ENKO Hauss Next";
+  src: url("assets/fonts/ALS-Hauss-Next-Medium.otf") format("opentype"),
+       local("ALS Hauss Next 1.0 Medium"),
+       local("ALSHaussNext1.0-Medium");
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+}
+
 :root {
   --ink: #f5f1ff;
   --muted: #9b94af;
   --surface: #141019;
   --surface-2: #1a1521;
   --line: rgba(255, 255, 255, 0.12);
-  --accent: #e6ff62;
+  --accent: #cfc393;
   --accent-ink: #17110a;
   --radius: 18px;
   font-family: Inter, "Helvetica Neue", Arial, sans-serif;
@@ -63,7 +73,7 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 56px); font-weight: 500; letter-spac
 .button:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.24); }
 .button:active { transform: translateY(1px); }
 .button--primary { color: var(--accent-ink); border-color: var(--accent); background: var(--accent); }
-.button--primary:hover { background: #f0ff9b; border-color: #f0ff9b; }
+.button--primary:hover { background: #ddd2a8; border-color: #ddd2a8; }
 
 .workspace {
   display: grid;
@@ -77,43 +87,22 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 56px); font-weight: 500; letter-spac
 .stage {
   position: sticky;
   top: 16px;
-  display: grid;
-  place-items: center;
-  height: calc(100vh - 118px);
-  min-height: 560px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background-color: #151019;
-  background-image:
-    linear-gradient(45deg, rgba(255,255,255,.025) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(255,255,255,.025) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, rgba(255,255,255,.025) 75%),
-    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,.025) 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: calc(100dvh - 140px);
 }
 
-canvas {
+#preview {
   display: block;
-  max-width: calc(100% - 40px);
-  max-height: calc(100% - 40px);
-  width: auto;
-  height: auto;
-  background: #12052f;
+  flex: none;
   box-shadow: 0 24px 70px rgba(0,0,0,.48);
 }
 
 .render-badge {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  padding: 7px 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
+  margin: 16px 0 0;
   color: var(--muted);
-  background: rgba(12,9,16,.8);
-  backdrop-filter: blur(12px);
   font-size: 11px;
 }
 
@@ -134,7 +123,9 @@ canvas {
 .field { display: grid; gap: 8px; margin-top: 14px; color: var(--muted); font-size: 12px; }
 .field:first-of-type { margin-top: 0; }
 .field small, .range-field small { color: #777083; font-size: 10px; line-height: 1.35; }
+.field-note { margin: 12px 0 0; color: #777083; font-size: 10px; line-height: 1.45; }
 .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#customPrintSize[hidden] { display: none; }
 
 select, input[type="text"], input[type="number"], input[type="file"] {
   width: 100%;
@@ -154,7 +145,7 @@ input[type="color"] { width: 44px; height: 32px; padding: 2px; border: 1px solid
 .range-field { display: grid; gap: 9px; margin-top: 16px; }
 .range-field > span { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; }
 .range-field output { min-width: 34px; color: var(--ink); font: 600 11px/1 monospace; text-align: right; }
-.range-field--accent { padding: 13px; margin-inline: -13px; border-radius: 10px; background: rgba(230,255,98,.06); }
+.range-field--accent { padding: 13px; margin-inline: -13px; border-radius: 10px; background: rgba(207,195,147,.08); }
 
 .toggle-field {
   display: grid;
@@ -230,14 +221,13 @@ input[type="range"]::-webkit-slider-thumb {
   .app-shell { padding: 14px; }
   .topbar { align-items: flex-start; }
   .workspace { grid-template-columns: 1fr; }
-  .stage { position: relative; top: auto; height: 66vh; min-height: 420px; }
+  .stage { position: relative; top: auto; height: 70dvh; }
 }
 
 @media (max-width: 590px) {
   .topbar { display: grid; }
   .topbar-actions .button { flex: 1; }
-  .stage { height: 56vh; }
-  canvas { max-width: calc(100% - 18px); max-height: calc(100% - 18px); }
+  .stage { height: 62dvh; }
   .corner-picker { grid-template-columns: repeat(4, 1fr); }
   .corner-picker legend { grid-column: 1 / -1; display: block; }
 }
